@@ -47,3 +47,19 @@ They can be downloaded from:
 
 https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
 
+## Predictor and Generator testing
+
+The testing script for the predictor model is located in:
+<pre>
+ common/xg_features.py
+</pre>
+
+The evaluation script for generated sequences is:
+<pre>
+generated_seq_analysis.py
+</pre>
+
+To run:
+<pre>
+python generated_seq_analysis.py
+</pre>

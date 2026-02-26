@@ -3,7 +3,7 @@ import pandas as pd
 import torch
 import joblib
 import xgboost as xgb
-
+from pathlib import Path
 from sklearn.metrics import (
     accuracy_score,
     roc_auc_score,
@@ -20,7 +20,6 @@ from transformers import (
 )
 
 from common.common import (
-    peptide_to_feature,
     peptide_to_feature_ids,
     peptide_to_feature_ids_sum,
     predict_ag_scores,
@@ -355,53 +354,36 @@ def select_important_aaindex_features(
 #          Main
 # ============================================================
 if __name__ == "__main__":
-
-    train_df = pd.read_csv("../data/train_dataset.csv")
-    train_df["sequence"] = train_df["sequence"].apply(replace_j_with_il)
-
-    sequences = train_df["sequence"].tolist()
-    labels = train_df["labels"].tolist()
-
-    feature_ids = select_important_aaindex_features(
-        sequences,
-        labels,
-        top_n=10,
-    )
-    feature_ids = [fid.replace("H ", "", 1) for fid in feature_ids]
-
+    # ===== 1. Load test dataset =====
     test_df = pd.read_csv("../data/test_dataset.csv")
+
+    # Apply sequence preprocessing
+    test_df["sequence"] = test_df["sequence"].apply(replace_j_with_il)
     test_sequences = test_df["sequence"].tolist()
 
-    X_train = extract_all_features_ids_batch_block(
-        sequences,
-        feature_ids,
-    )
+    # ===== 2. Load pre-selected feature IDs =====
+    # These feature IDs must be saved during the training stage
+    feature_ids = joblib.load("./result_outputs/trained_models/feature_ids.pkl")
+
+    # ===== 3. Extract features for test data =====
     X_test = extract_all_features_ids_batch_block(
         test_sequences,
         feature_ids,
     )
 
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
+    # ===== 4. Load fitted scaler and transform test features =====
+    scaler = joblib.load("./result_outputs/trained_models/brf_scaler_all15_2.pkl")
     X_test = scaler.transform(X_test)
 
-    brf = BalancedRandomForestClassifier(
-        n_estimators=100,
-        max_depth=8,
-        random_state=42,
-        n_jobs=-1,
-    )
+    # ===== 5. Load trained Balanced Random Forest model =====
+    brf = joblib.load("./result_outputs/trained_models/brf_model_all15_2.pkl")
 
-    print("Training started...")
-    brf.fit(X_train, train_df["labels"].values)
-
+    # ===== 6. Perform prediction =====
     y_pred = brf.predict(X_test)
     y_proba = brf.predict_proba(X_test)[:, 1]
 
+    # ===== 7. Evaluate model performance =====
     print("Accuracy:", accuracy_score(test_df["labels"], y_pred))
-    print("F1:", f1_score(test_df["labels"], y_pred))
-    print(classification_report(test_df["labels"], y_pred))
+    print("F1 Score:", f1_score(test_df["labels"], y_pred))
+    print("Classification Report:\n", classification_report(test_df["labels"], y_pred))
     print("AUC:", roc_auc_score(test_df["labels"], y_proba))
-
-    joblib.dump(brf, "../trained_models/balanced_rf_model_temp.pkl")
-    joblib.dump(scaler, "../trained_models/scaler.pkl")

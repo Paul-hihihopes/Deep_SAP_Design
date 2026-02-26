@@ -4,16 +4,6 @@ import joblib
 import numpy as np
 import pandas as pd
 import Levenshtein
-from Bio import SeqIO  # Requires biopython for FASTA processing
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score,
-    confusion_matrix,
-    classification_report,
-)
 
 from common.xg_features import (
     extract_all_features_ids_batch_block,

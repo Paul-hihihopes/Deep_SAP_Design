@@ -1,6 +1,6 @@
 Code for the deep learning–based self-assembling peptide design framework proposed in our paper "DeepSAP: An Integrated Generative and Predictive Deep-Learning Framework for Controllable Design of Self-Assembling Peptides".
 
-project_root/
+<pre> project_root/
  ├── common/
  ├── model/
  │    ├── ap_model.py
@@ -18,7 +18,7 @@ project_root/
  ├── prompt_finetune.py
  ├── generate_seq_analysis.py
  ├── .gitignore
- └── README.md
+ └── README.md</pre>
  
  Before running the code, please ensure:
  

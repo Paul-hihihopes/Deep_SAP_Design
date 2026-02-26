@@ -33,11 +33,11 @@ Tested on:
 - CUDA 12.8
 
 ## Installation
-git clone https://github.com/Paul-hihihopes/Deep_SAP_Design.git
+<pre>git clone https://github.com/Paul-hihihopes/Deep_SAP_Design.git
 
 cd <project_root>
 
-pip install -r requirements.txt
+pip install -r requirements.txt</pre>
 
 ## Model Checkpoints and Data
 

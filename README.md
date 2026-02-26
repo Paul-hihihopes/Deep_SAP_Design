@@ -21,9 +21,10 @@ project_root/
  └── README.md
  
  Before running the code, please ensure:
+ 
   1. The folder `pLM/` exists in the project root directory.
   2. ESM2 weights are placed under `pLM/esm2/`.
-  3. BioGPT weights are placed under `pLM/biogpt/`.
+  4. BioGPT weights are placed under `pLM/biogpt/`.
 
 ## Environment
 Tested on:
@@ -33,12 +34,16 @@ Tested on:
 
 ## Installation
 git clone https://github.com/Paul-hihihopes/Deep_SAP_Design.git
+
 cd <project_root>
+
 pip install -r requirements.txt
 
 ## Model Checkpoints and Data
+
 Due to file size limitations, the trained model checkpoints and processed datasets are not included in this repository.
 
 They can be downloaded from:
+
 https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
 

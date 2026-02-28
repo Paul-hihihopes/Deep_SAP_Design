@@ -1,0 +1,17 @@
+Bio==1.8.1
+biopython==1.85
+imbalanced_learn==0.13.0
+imblearn==0.0
+joblib==1.4.2
+matplotlib==3.10.8
+numpy==2.4.2
+pandas==3.0.1
+python_Levenshtein==0.27.3
+rdkit==2024.9.6
+scikit_learn==1.8.0
+scipy==1.17.1
+seaborn==0.13.2
+torch==2.5.0
+tqdm==4.67.1
+transformers==4.50.0
+xgboost==3.2.0

@@ -14,9 +14,9 @@ Code for the deep learning–based self-assembling peptide design framework prop
  ├── result_outputs/
  ├── requirements.txt
  ├── model_training.py
- ├── xg_predict.py
+ ├── brf_predict.py
  ├── prompt_finetune.py
- ├── generate_seq_analysis.py
+ ├── model_generate.py
  ├── .gitignore
  └── README.md</pre>
  

@@ -4,7 +4,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import Levenshtein
-
+from Bio import SeqIO
 from common.xg_features import (
     extract_all_features_ids_batch_block,
     replace_j_with_il,
@@ -185,7 +185,7 @@ if __name__ == "__main__":
     # Configuration
     # ------------------------------------------------------------
     fasta_file_path = Path(
-        "./result_outputs/generated_results/scheduler_e10_Sa9.fasta"
+        "./result_outputs/generated_results/scheduler_e10_Sa6.fasta"
     )
     model_path = Path(
         "./result_outputs/trained_models/brf_model_all15_2.pkl"

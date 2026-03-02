@@ -204,7 +204,7 @@ def get_ag_scores(seqs):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     model_path = "./result_outputs/trained_models/best_ag_regressor.pt"
-    model_name = "./pLM/esm2"
+    model_name = ("./pLM/esm2")
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = ESMPositionalRegressor(
@@ -355,7 +355,7 @@ def select_important_aaindex_features(
 # ============================================================
 if __name__ == "__main__":
     # ===== 1. Load test dataset =====
-    test_df = pd.read_csv("../data/test_dataset.csv")
+    test_df = pd.read_csv("../data/test_dataset_15.csv")
 
     # Apply sequence preprocessing
     test_df["sequence"] = test_df["sequence"].apply(replace_j_with_il)
@@ -363,7 +363,8 @@ if __name__ == "__main__":
 
     # ===== 2. Load pre-selected feature IDs =====
     # These feature IDs must be saved during the training stage
-    feature_ids = joblib.load("./result_outputs/trained_models/feature_ids.pkl")
+    feature_ids = ['BAEK050101', 'TANS770102', 'YANJ020101', 'VINM940102', 'JOND920101', 'PONP800103', 'CIDH920104',
+            'ROBB760113', 'QIAN880128', 'QIAN880121']
 
     # ===== 3. Extract features for test data =====
     X_test = extract_all_features_ids_batch_block(
@@ -372,11 +373,11 @@ if __name__ == "__main__":
     )
 
     # ===== 4. Load fitted scaler and transform test features =====
-    scaler = joblib.load("./result_outputs/trained_models/brf_scaler_all15_2.pkl")
+    scaler = joblib.load("../result_outputs/trained_models/brf_scaler_all15_2.pkl")
     X_test = scaler.transform(X_test)
 
     # ===== 5. Load trained Balanced Random Forest model =====
-    brf = joblib.load("./result_outputs/trained_models/brf_model_all15_2.pkl")
+    brf = joblib.load("../result_outputs/trained_models/brf_model_all15_2.pkl")
 
     # ===== 6. Perform prediction =====
     y_pred = brf.predict(X_test)

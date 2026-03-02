@@ -27,12 +27,11 @@ from Bio.Align import substitution_matrices
 # ============================================================
 # Project-specific Imports
 # ============================================================
-from xg_predict import predict_fasta_file
+
 from common.common import (
     prompt_generate,
     avg_pairwise_distance,
-    convert_prompt_with_discretized_pI,
-    discretize_logp,
+    convert_prompt_with_discretized_pI
 )
 from model.gpt_model import PeptidePromptGPT, PeptideTokenizer
 
@@ -283,15 +282,15 @@ if __name__ == "__main__":
     print("Self-assembly generation benchmark started")
 
     generation_tasks = [
-        ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:2.5-3.0", 500, "Sa1", 20),
-        ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:0.5-1.0", 375, "Sa2", None),
-        ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.0-1.5", 400, "Sa3", None),
-        ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.5-2.0", 225, "Sa4", None),
-        ("Self assembly+pI:8.0-8.5+Length:15+GRAVY:1.0-1.5", 125, "Sa5", 15),
-        ("Self assembly+pI:8.0-8.5+Length:10+GRAVY:0.0-0.5", 100, "Sa6", None),
-        ("Self assembly+pI:7.0-7.5+Length:6+GRAVY:-0.5-0.0", 1000, "Sa7", None),
+        ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:2.5-3.0", 500, "Sa1", 10),
+        ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:0.5-1.0", 375, "Sa2", 10),
+        ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.0-1.5", 400, "Sa3", 10),
+        ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.5-2.0", 225, "Sa4", 10),
+        ("Self assembly+pI:8.0-8.5+Length:15+GRAVY:1.0-1.5", 125, "Sa5", 20),
+        ("Self assembly+pI:8.0-8.5+Length:10+GRAVY:0.0-0.5", 100, "Sa6", 20),
+        ("Self assembly+pI:6.0-6.5+Length:5+GRAVY:0.0-0.5", 75, "Sa7", 10),
         ("Self assembly+pI:6.0-6.5+Length:7+GRAVY:-3.0--2.5", 75, "Sa8", 15),
-        ("Self assembly+pI:7.0-7.5+Length:12+GRAVY:-0.5-0.0", 1000, "Sa9", 10),
+        ("Self assembly+pI:7.0-7.5+Length:12+GRAVY:-0.5-0.0", 100, "Sa9", 20),
         ("Self assembly+pI:7.0-7.5+Length:6+GRAVY:1.0-1.5", 30, "Sa10", 10),
     ]
 

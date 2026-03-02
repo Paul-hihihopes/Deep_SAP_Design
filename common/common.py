@@ -79,7 +79,7 @@ def prompt_generate(
     generated_seqs = model.generate(
         prompt_tokens,
         num_samples,
-        max_len,
+        max_gen_len=max_len,
         top_k=5,
     )
 
@@ -346,6 +346,10 @@ def clip_loss(
 
     return (loss_i2t + loss_t2i) / 2
 
+def top_k_logits(logits, k):
+    values, _ = torch.topk(logits, k)
+    min_values = values[:, -1].unsqueeze(1)
+    return torch.where(logits < min_values, torch.full_like(logits, float('-inf')), logits)
 
 class DistillationLoss(nn.Module):
     """

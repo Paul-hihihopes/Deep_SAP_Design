@@ -6,6 +6,8 @@ import time
 import random
 import pickle
 from collections import Counter
+import argparse
+from pathlib import Path
 
 # ============================================================
 # Third-party Libraries
@@ -200,14 +202,51 @@ def evaluate_task_group(task_list, group_name="Group"):
 # Main Execution
 # ============================================================
 if __name__ == "__main__":
-
     # --------------------------------------------------------
     # Device configuration
     # --------------------------------------------------------
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     MAX_LEN = 40
-    num_epochs = 20
+
+    parser = argparse.ArgumentParser(
+        description="Peptide generation script"
+    )
+
+    parser.add_argument(
+        "--prompt",
+        type=str,
+        default=None,
+        help="Single generation prompt. If not provided, default benchmark tasks will be used.",
+    )
+
+    parser.add_argument(
+        "--num_samples",
+        type=int,
+        default=500,
+        help="Number of generated sequences (for single task mode).",
+    )
+
+    parser.add_argument(
+        "--max_len",
+        type=int,
+        default=10,
+        help="Maximum generation length (for single task mode).",
+    )
+
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default="./result_outputs/generated_results",
+        help="Directory to save generated FASTA files.",
+    )
+
+    args = parser.parse_args()
+
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    print("Self-assembly generation started")
 
     # --------------------------------------------------------
     # Token definitions
@@ -277,54 +316,124 @@ if __name__ == "__main__":
     # --------------------------------------------------------
     # Generation benchmarks
     # --------------------------------------------------------
-    elapsed = []
+    # elapsed = []
+    #
+    # print("Self-assembly generation benchmark started")
+    #
+    # generation_tasks = [
+    #     ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:2.5-3.0", 500, "Sa1", 10),
+    #     ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:0.5-1.0", 375, "Sa2", 10),
+    #     ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.0-1.5", 400, "Sa3", 10),
+    #     ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.5-2.0", 225, "Sa4", 10),
+    #     ("Self assembly+pI:8.0-8.5+Length:15+GRAVY:1.0-1.5", 125, "Sa5", 20),
+    #     ("Self assembly+pI:8.0-8.5+Length:10+GRAVY:0.0-0.5", 100, "Sa6", 20),
+    #     ("Self assembly+pI:6.0-6.5+Length:5+GRAVY:0.0-0.5", 75, "Sa7", 10),
+    #     ("Self assembly+pI:6.0-6.5+Length:7+GRAVY:-3.0--2.5", 75, "Sa8", 15),
+    #     ("Self assembly+pI:7.0-7.5+Length:12+GRAVY:-0.5-0.0", 100, "Sa9", 20),
+    #     ("Self assembly+pI:7.0-7.5+Length:6+GRAVY:1.0-1.5", 30, "Sa10", 10),
+    # ]
+    #
+    # for prompt, num, tag, max_len in generation_tasks:
+    #     start = time.time()
+    #     prompt_generate(
+    #         prompt,
+    #         num_samples=num,
+    #         save_path=f"./result_outputs/generated_results/generated_{tag}.fasta",
+    #         model=model,
+    #         tokenizer=tokenizer,
+    #         max_len=max_len,
+    #     )
+    #     elapsed.append(time.time() - start)
+    #
+    # print(
+    #     f"Average generation time: {np.mean(elapsed):.4f} s, "
+    #     f"Std: {np.std(elapsed):.4f} s"
+    # )
 
-    print("Self-assembly generation benchmark started")
+    # ==========================================================
+    # CASE 1: Single-task mode
+    # ==========================================================
+    if args.prompt is not None:
 
-    generation_tasks = [
-        ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:2.5-3.0", 500, "Sa1", 10),
-        ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:0.5-1.0", 375, "Sa2", 10),
-        ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.0-1.5", 400, "Sa3", 10),
-        ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.5-2.0", 225, "Sa4", 10),
-        ("Self assembly+pI:8.0-8.5+Length:15+GRAVY:1.0-1.5", 125, "Sa5", 20),
-        ("Self assembly+pI:8.0-8.5+Length:10+GRAVY:0.0-0.5", 100, "Sa6", 20),
-        ("Self assembly+pI:6.0-6.5+Length:5+GRAVY:0.0-0.5", 75, "Sa7", 10),
-        ("Self assembly+pI:6.0-6.5+Length:7+GRAVY:-3.0--2.5", 75, "Sa8", 15),
-        ("Self assembly+pI:7.0-7.5+Length:12+GRAVY:-0.5-0.0", 100, "Sa9", 20),
-        ("Self assembly+pI:7.0-7.5+Length:6+GRAVY:1.0-1.5", 30, "Sa10", 10),
-    ]
+        print("Running single-task generation mode")
 
-    for prompt, num, tag, max_len in generation_tasks:
+        save_path = output_dir / "generated_single_task.fasta"
+
         start = time.time()
+
         prompt_generate(
-            prompt,
-            num_samples=num,
-            save_path=f"./result_outputs/generated_results/scheduler_e10_{tag}.fasta",
+            args.prompt,
+            num_samples=args.num_samples,
+            save_path=str(save_path),
             model=model,
             tokenizer=tokenizer,
-            max_len=max_len,
+            max_len=args.max_len,
         )
-        elapsed.append(time.time() - start)
 
-    print(
-        f"Average generation time: {np.mean(elapsed):.4f} s, "
-        f"Std: {np.std(elapsed):.4f} s"
-    )
+        elapsed = time.time() - start
 
-    # --------------------------------------------------------
-    # Merge FASTA outputs
-    # --------------------------------------------------------
-    filenames = [
-        f"./result_outputs/generated_results/scheduler_e10_Sa{i+1}.fasta"
-        for i in range(10)
-    ]
+        print(f"Generation finished in {elapsed:.4f} s")
+        print(f"Saved to {save_path}")
 
-    merged_records = []
-    for fname in filenames:
-        merged_records.extend(list(SeqIO.parse(fname, "fasta")))
+    # ==========================================================
+    # CASE 2: Default benchmark mode
+    # ==========================================================
+    else:
 
-    SeqIO.write(
-        merged_records,
-        "./result_outputs/generated_results/scheduler_e10_Sa_merge.fasta",
-        "fasta",
-    )
+        print("Running default benchmark generation tasks")
+
+        generation_tasks = [
+            ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:2.5-3.0", 500, "Sa1", 10),
+            ("Self assembly+pI:5.5-6.0+Length:4+GRAVY:0.5-1.0", 375, "Sa2", 10),
+            ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.0-1.5", 400, "Sa3", 10),
+            ("Self assembly+pI:3.5-4.0+Length:6+GRAVY:1.5-2.0", 225, "Sa4", 10),
+            ("Self assembly+pI:8.0-8.5+Length:15+GRAVY:1.0-1.5", 125, "Sa5", 20),
+            ("Self assembly+pI:8.0-8.5+Length:10+GRAVY:0.0-0.5", 100, "Sa6", 20),
+            ("Self assembly+pI:6.0-6.5+Length:5+GRAVY:0.0-0.5", 75, "Sa7", 10),
+            ("Self assembly+pI:6.0-6.5+Length:7+GRAVY:-3.0--2.5", 75, "Sa8", 15),
+            ("Self assembly+pI:7.0-7.5+Length:12+GRAVY:-0.5-0.0", 100, "Sa9", 20),
+            ("Self assembly+pI:7.0-7.5+Length:6+GRAVY:1.0-1.5", 30, "Sa10", 10),
+        ]
+
+        elapsed = []
+
+        for prompt, num, tag, max_len in generation_tasks:
+
+            save_path = output_dir / f"generated_{tag}.fasta"
+
+            start = time.time()
+
+            prompt_generate(
+                prompt,
+                num_samples=num,
+                save_path=str(save_path),
+                model=model,
+                tokenizer=tokenizer,
+                max_len=max_len,
+            )
+
+            elapsed.append(time.time() - start)
+
+        print(
+            f"Average generation time: {np.mean(elapsed):.4f} s, "
+            f"Std: {np.std(elapsed):.4f} s"
+        )
+
+
+        # --------------------------------------------------------
+        # Merge FASTA outputs
+        # --------------------------------------------------------
+        filenames = [
+            f"./result_outputs/generated_results/generated_Sa{i+1}.fasta"
+            for i in range(10)
+        ]
+
+        merged_records = []
+        for fname in filenames:
+            merged_records.extend(list(SeqIO.parse(fname, "fasta")))
+
+        SeqIO.write(
+            merged_records,
+            "./result_outputs/generated_results/generated_Sa_merge.fasta",
+            "fasta",
+        )

@@ -9,7 +9,7 @@ from common.xg_features import (
     extract_all_features_ids_batch_block,
     replace_j_with_il,
 )
-
+import argparse
 
 # ============================================================
 # Prediction Utilities
@@ -184,9 +184,35 @@ if __name__ == "__main__":
     # ------------------------------------------------------------
     # Configuration
     # ------------------------------------------------------------
-    fasta_file_path = Path(
-        "./result_outputs/generated_results/scheduler_e10_Sa6.fasta"
+    parser = argparse.ArgumentParser(
+        description="Predict and analyze generated protein sequences."
     )
+
+    parser.add_argument(
+        "--fasta",
+        type=str,
+        required=True,
+        help="Path to generated FASTA file",
+    )
+
+    parser.add_argument(
+        "--top_k",
+        type=int,
+        default=20,
+        help="Number of sequences selected by MMR",
+    )
+
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="./result_outputs/generated_analysis/prediction_results.csv",
+        help="Output CSV file path",
+    )
+
+    args = parser.parse_args()
+    fasta_file_path = Path(args.fasta)
+    output_path = Path(args.output)
+
     model_path = Path(
         "./result_outputs/trained_models/brf_model_all15_2.pkl"
     )
@@ -219,7 +245,7 @@ if __name__ == "__main__":
     # ------------------------------------------------------------
     results = results.drop_duplicates(subset="sequence", keep="first")
 
-    selected = select_mmr(results, top_k=20, lambda_=0.9)
+    selected = select_mmr(results, top_k=args.top_k, lambda_=0.9)
     print("MMR-selected sequences:", selected)
 
     hit_rate = len(results[results["prediction_probability"] > 0.5]) / len(results)
@@ -236,35 +262,8 @@ if __name__ == "__main__":
     results["hydrophobic_ratio"] = results["sequence"].apply(hydrophobic_ratio)
 
     # ------------------------------------------------------------
-    # Filtering conditions
-    # ------------------------------------------------------------
-    filtered_results = results[
-        (results["gravy"] < 0.2) &
-        (results["gravy"] > -0.7) &
-        (results["hydrophobic_ratio"] <= 0.5) &
-        (results["sequence"].str.len() == 10)
-    ]
-
-    print("Filter pass ratio:", len(filtered_results) / len(results))
-    print("Mean prediction probability:", results["prediction_probability"].mean())
-
-    top_filtered = filtered_results.sort_values(
-        by="prediction_probability", ascending=False
-    ).head(20)
-
-    print("Top 20 filtered results:")
-    print(top_filtered[[
-        "sequence",
-        "prediction_probability",
-        "gravy",
-        "hydrophobic_ratio",
-    ]])
-
-    # ------------------------------------------------------------
     # Save results
     # ------------------------------------------------------------
-    output_path = Path(
-        "./result_outputs/generated_analysis/prediction_results.csv"
-    )
+
     results.to_csv(output_path, index=False)
     print(f"Prediction results saved to {output_path}")

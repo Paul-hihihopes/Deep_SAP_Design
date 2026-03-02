@@ -47,14 +47,28 @@ They can be downloaded from:
 
 https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
 
-## Predictor and Generator testing
+## Predictor Usage
 
 The testing script for the predictor model is located in:
 <pre>
  common/xg_features.py
 </pre>
 
+The prediction script for the trained BRF classifier is:
 
+<pre> brf_predict.py </pre>
+
+Run Prediction
+<pre> python brf_predict.py \ --fasta generated_sequences.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
+
+Argument Table:
+| Argument   | Description                                   |
+| ---------- | --------------------------------------------- |
+| `--fasta`  | Input FASTA file containing peptide sequences |
+| `--top_k`  | Number of sequences selected by MMR           |
+| `--output` | Path to save prediction results (CSV)         |
+
+## Generator Usage
 The script for sequences generation is:
 <pre>
 model_generate.py
@@ -69,7 +83,7 @@ python model_generate.py \
     --output_dir ./outputs/
 </pre>
 
-Argument:
+Argument Table:
 | Argument        | Description                             |
 | --------------- | --------------------------------------- |
 | `--prompt`      | Property-controlled generation prompt   |

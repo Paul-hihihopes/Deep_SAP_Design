@@ -55,7 +55,6 @@ The testing script for the predictor model is located in:
 </pre>
 
 
-
 The script for sequences generation is:
 <pre>
 model_generate.py
@@ -70,6 +69,7 @@ python model_generate.py \
     --output_dir ./outputs/
 </pre>
 
+Argument:
 | Argument        | Description                             |
 | --------------- | --------------------------------------- |
 | `--prompt`      | Property-controlled generation prompt   |

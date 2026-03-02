@@ -54,14 +54,33 @@ The testing script for the predictor model is located in:
  common/xg_features.py
 </pre>
 
-The evaluation script for generated sequences is:
+
+
+The script for sequences generation is:
 <pre>
-generated_seq_analysis.py
+model_generate.py
 </pre>
 
-To run:
+To generate sequences with custom property constraints:
 <pre>
-python generated_seq_analysis.py
+python model_generate.py \
+    --prompt "Self assembly+pI:6.0-6.5+Length:5+GRAVY:0.0-0.5" \
+    --num_samples 500 \
+    --max_len 10 \
+    --output_dir ./outputs/
 </pre>
 
-To generate sequences with different target properties, modify the `generation_tasks` parameter in `generated_seq_analysis.py`, and then run again.
+| Argument        | Description                             |
+| --------------- | --------------------------------------- |
+| `--prompt`      | Property-controlled generation prompt   |
+| `--num_samples` | Number of sequences to generate         |
+| `--max_len`     | Maximum peptide length                  |
+| `--output_dir`  | Directory to save generated FASTA files |
+
+
+If no --prompt argument is provided, the script automatically runs the predefined benchmark tasks used in the manuscript:
+<pre>
+python generate.py
+</pre>
+
+

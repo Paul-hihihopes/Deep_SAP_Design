@@ -61,7 +61,7 @@ The prediction script for the trained BRF classifier is:
 Run Prediction
 <pre> python brf_predict.py \ --fasta generated_sequences.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
 
-Argument Table:
+Explanation of arguments:
 | Argument   | Description                                   |
 | ---------- | --------------------------------------------- |
 | `--fasta`  | Input FASTA file containing peptide sequences |
@@ -83,7 +83,7 @@ python model_generate.py \
     --output_dir ./outputs/
 </pre>
 
-Argument Table:
+Explanation of arguments:
 | Argument        | Description                             |
 | --------------- | --------------------------------------- |
 | `--prompt`      | Property-controlled generation prompt   |

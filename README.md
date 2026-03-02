@@ -45,7 +45,9 @@ Due to file size limitations, the trained model checkpoints and other files are 
 
 They can be downloaded from:
 
-https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
+Zenodo:https://doi.org/10.5281/zenodo.18835816
+
+Baidu NetDisk: https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
 
 ## Predictor Usage
 

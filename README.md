@@ -54,6 +54,12 @@ The testing script for the predictor model is located in:
  common/xg_features.py
 </pre>
 
+To run tesing:
+<pre>
+cd common
+python xg_features.py 
+</pre>
+
 The prediction script for the trained BRF classifier is:
 
 <pre> brf_predict.py </pre>

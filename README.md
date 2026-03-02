@@ -14,9 +14,9 @@ Code for the deep learning–based self-assembling peptide design framework prop
  ├── result_outputs/
  ├── requirements.txt
  ├── model_training.py
- ├── xg_predict.py
+ ├── brf_predict.py
  ├── prompt_finetune.py
- ├── generate_seq_analysis.py
+ ├── model_generate.py
  ├── .gitignore
  └── README.md</pre>
  
@@ -35,17 +35,19 @@ Tested on:
 ## Installation
 <pre>git clone https://github.com/Paul-hihihopes/Deep_SAP_Design.git
 
-cd root
+cd Deep_SAP_Design
 
 pip install -r requirements.txt</pre>
 
 ## Model Checkpoints and Data
 
-Due to file size limitations, the trained model checkpoints and processed datasets are not included in this repository.
+Due to file size limitations, the trained model checkpoints and other files are not included in this repository.
 
 They can be downloaded from:
 
-https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
+Zenodo:  https://doi.org/10.5281/zenodo.18835816
+
+Baidu NetDisk:  https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
 
 ## Predictor Usage
 
@@ -65,7 +67,7 @@ The prediction script for the trained BRF classifier is:
 <pre> brf_predict.py </pre>
 
 Run Prediction
-<pre> python brf_predict.py \ --fasta generated_sequences.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
+<pre> python brf_predict.py \ --fasta seqs_example.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
 
 Explanation of arguments:
 | Argument   | Description                                   |

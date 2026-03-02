@@ -94,7 +94,7 @@ Argument Table:
 
 If no --prompt argument is provided, the script automatically runs the predefined benchmark tasks used in the manuscript:
 <pre>
-python generate.py
+python model_generate.py
 </pre>
 
 

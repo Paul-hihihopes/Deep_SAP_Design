@@ -41,7 +41,7 @@ pip install -r requirements.txt</pre>
 
 ## Model Checkpoints and Data
 
-Due to file size limitations, the trained model checkpoints and processed datasets are not included in this repository.
+Due to file size limitations, the trained model checkpoints and other files are not included in this repository.
 
 They can be downloaded from:
 
@@ -65,7 +65,7 @@ The prediction script for the trained BRF classifier is:
 <pre> brf_predict.py </pre>
 
 Run Prediction
-<pre> python brf_predict.py \ --fasta generated_sequences.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
+<pre> python brf_predict.py \ --fasta seqs_example.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
 
 Explanation of arguments:
 | Argument   | Description                                   |

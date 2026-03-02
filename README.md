@@ -47,21 +47,60 @@ They can be downloaded from:
 
 https://pan.baidu.com/s/18sdYlMLot79H-oOoVy85nQ?pwd=m6cr
 
-## Predictor and Generator testing
+## Predictor Usage
 
 The testing script for the predictor model is located in:
 <pre>
  common/xg_features.py
 </pre>
 
-The evaluation script for generated sequences is:
+To run tesing:
 <pre>
-generated_seq_analysis.py
+cd common
+python xg_features.py 
 </pre>
 
-To run:
+The prediction script for the trained BRF classifier is:
+
+<pre> brf_predict.py </pre>
+
+Run Prediction
+<pre> python brf_predict.py \ --fasta generated_sequences.fasta \ --top_k 20 \ --output ./result_outputs/generated_analysis/prediction_results.csv </pre>
+
+Explanation of arguments:
+| Argument   | Description                                   |
+| ---------- | --------------------------------------------- |
+| `--fasta`  | Input FASTA file containing peptide sequences |
+| `--top_k`  | Number of sequences selected by MMR           |
+| `--output` | Path to save prediction results (CSV)         |
+
+## Generator Usage
+The script for sequences generation is:
 <pre>
-python generated_seq_analysis.py
+model_generate.py
 </pre>
 
-To generate sequences with different target properties, modify the `generation_tasks` parameter in `generated_seq_analysis.py`, and then run again.
+To generate sequences with custom property constraints:
+<pre>
+python model_generate.py \
+    --prompt "Self assembly+pI:6.0-6.5+Length:5+GRAVY:0.0-0.5" \
+    --num_samples 500 \
+    --max_len 10 \
+    --output_dir ./outputs/
+</pre>
+
+Explanation of arguments:
+| Argument        | Description                             |
+| --------------- | --------------------------------------- |
+| `--prompt`      | Property-controlled generation prompt   |
+| `--num_samples` | Number of sequences to generate         |
+| `--max_len`     | Maximum peptide length                  |
+| `--output_dir`  | Directory to save generated FASTA files |
+
+
+If no --prompt argument is provided, the script automatically runs the predefined benchmark tasks used in the manuscript:
+<pre>
+python model_generate.py
+</pre>
+
+

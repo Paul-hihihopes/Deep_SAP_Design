@@ -63,3 +63,5 @@ To run:
 <pre>
 python generated_seq_analysis.py
 </pre>
+
+To generate sequences with different target properties, modify the `generation_tasks` parameter in `generated_seq_analysis.py`, and then run again.

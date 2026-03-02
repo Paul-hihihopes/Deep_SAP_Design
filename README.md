@@ -35,7 +35,7 @@ Tested on:
 ## Installation
 <pre>git clone https://github.com/Paul-hihihopes/Deep_SAP_Design.git
 
-cd root
+cd Deep_SAP_Design
 
 pip install -r requirements.txt</pre>
 
